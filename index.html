@@ -426,7 +426,7 @@
             </div>
             <div class="filter-buttons">
                 <button class="filter-btn active" onclick="sortMembers('name')">이름순</button>
-                <button class="filter-btn" onclick="sortMembers('joinDate')">입장일순</button>
+                <button class="filter-btn" onclick="sortMembers('joinDate')">입회날짜순</button>
                 <button class="filter-btn" onclick="sortMembers('fee')">회비순</button>
                 <button class="filter-btn" onclick="sortMembers('hours')">시간순</button>
             </div>
@@ -443,7 +443,7 @@
                     <input type="tel" id="phone" placeholder="010-1234-5678">
                 </div>
                 <div class="form-group">
-                    <label for="joinDate">입장일</label>
+                    <label for="joinDate">입회날짜</label>
                     <input type="date" id="joinDate">
                 </div>
                 <div class="form-group">
@@ -658,7 +658,7 @@
                     </div>
                     <div class="member-info">
                         ${member.phone ? `<div>📞 ${member.phone}</div>` : ''}
-                        ${member.joinDate ? `<div>📅 입장일: ${formatDate(member.joinDate)}</div>` : ''}
+                        ${member.joinDate ? `<div>📅 입회날짜: ${formatDate(member.joinDate)}</div>` : ''}
                         ${member.email ? `<div>📧 ${member.email}</div>` : ''}
                         ${member.address ? `<div>📍 ${member.address}</div>` : ''}
                         <div style="margin-top: 8px;">
