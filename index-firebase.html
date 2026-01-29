@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#2196F3">
+    <title>회원 관리 앱</title>
+    <link rel="manifest" href="manifest.json">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 10px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2196F3, #1976D2);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        .club-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .member-count {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .sync-status {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 12px;
+            background: rgba(255,255,255,0.2);
+            padding: 5px 10px;
+            border-radius: 15px;
+        }
+
+        .settings-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .settings-icon:hover {
+            background: rgba(255,255,255,0.3);
+            transform: rotate(90deg);
+        }
+
+        .settings-icon svg {
+            width: 20px;
+            height: 20px;
+            fill: white;
+        }
+
+        /* 검색 및 정렬 섹션 */
+        .search-section {
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .search-box input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #2196F3;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 6px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 20px;
+            background: white;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-btn.active {
+            background: #2196F3;
+            color: white;
+            border-color: #2196F3;
+        }
+
+        .form-section {
+            padding: 20px;
+            background: #f8f9fa;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 0;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+            font-family: inherit;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #2196F3;
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn {
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            color: white;
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .btn-add {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+        }
+
+        .btn-update {
+            background: linear-gradient(135deg, #2196F3, #1976D2);
+        }
+
+        .btn-clear {
+            background: linear-gradient(135deg, #FF9800, #F57C00);
+        }
+
+        .list-section {
+            max-height: 500px;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .member-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .member-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .member-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .member-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .btn-edit, .btn-delete {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            color: white;
+            font-weight: 600;
+        }
+
+        .btn-edit {
+            background: #2196F3;
+        }
+
+        .btn-delete {
+            background: #f44336;
+        }
+
+        .member-info {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.8;
+        }
+
+        .member-info div {
+            margin-bottom: 3px;
+        }
+
+        .info-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            background: #e3f2fd;
+            color: #1976d2;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-right: 5px;
+            margin-top: 5px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+
+        .empty-state svg {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 15px;
+            opacity: 0.3;
+        }
+
+        /* 설정 모달 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 400px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            font-size: 20px;
+        }
+
+        .close-btn {
+            width: 30px;
+            height: 30px;
+            border: none;
+            background: #f0f0f0;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            line-height: 1;
+        }
+
+        .modal-content p {
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .modal-buttons button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            color: white;
+        }
+
+        .firebase-setup {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .firebase-setup h3 {
+            color: #856404;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .firebase-setup p {
+            color: #856404;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        .firebase-setup textarea {
+            width: 100%;
+            height: 80px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+
+        /* 스크롤바 스타일 */
+        .list-section::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .list-section::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .list-section::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+
+        /* 애니메이션 */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .member-card {
+            animation: slideIn 0.3s ease;
+        }
+
+        /* 반응형 */
+        @media (max-width: 600px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-buttons {
+                font-size: 11px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="sync-status" id="syncStatus">☁️ 로컬</div>
+            <div class="settings-icon" onclick="openSettings()">
+                <svg viewBox="0 0 24 24">
+                    <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/>
+                </svg>
+            </div>
+            <h1>👥 회원 관리</h1>
+            <div class="club-name" id="clubNameDisplay">구장명을 설정하세요</div>
+            <div class="member-count">총 <span id="memberCount">0</span>명</div>
+        </div>
+
+        <!-- 검색 및 정렬 섹션 -->
+        <div class="search-section">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="🔍 이름, 전화번호로 검색..." onkeyup="searchMembers()">
+            </div>
+            <div class="filter-buttons">
+                <button class="filter-btn active" onclick="sortMembers('name')">이름순</button>
+                <button class="filter-btn" onclick="sortMembers('joinDate')">입장일순</button>
+                <button class="filter-btn" onclick="sortMembers('fee')">회비순</button>
+                <button class="filter-btn" onclick="sortMembers('hours')">시간순</button>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="name">이름 *</label>
+                    <input type="text" id="name" placeholder="이름 입력">
+                </div>
+                <div class="form-group">
+                    <label for="phone">전화번호</label>
+                    <input type="tel" id="phone" placeholder="010-1234-5678">
+                </div>
+                <div class="form-group">
+                    <label for="joinDate">입장일</label>
+                    <input type="date" id="joinDate">
+                </div>
+                <div class="form-group">
+                    <label for="fee">월회비 (원)</label>
+                    <input type="number" id="fee" placeholder="100000">
+                </div>
+                <div class="form-group">
+                    <label for="hours">월 시간 (시간)</label>
+                    <input type="number" id="hours" placeholder="10">
+                </div>
+                <div class="form-group">
+                    <label for="email">이메일</label>
+                    <input type="email" id="email" placeholder="example@email.com">
+                </div>
+                <div class="form-group full-width">
+                    <label for="address">주소</label>
+                    <input type="text" id="address" placeholder="주소 입력">
+                </div>
+            </div>
+            <div class="button-group">
+                <button class="btn btn-add" onclick="addMember()">추가</button>
+                <button class="btn btn-update" onclick="updateMember()">수정</button>
+                <button class="btn btn-clear" onclick="clearForm()">초기화</button>
+            </div>
+        </div>
+
+        <div class="list-section" id="memberList">
+            <div class="empty-state">
+                <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
+                </svg>
+                <p>등록된 회원이 없습니다</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 설정 모달 -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>⚙️ 설정</h2>
+                <button class="close-btn" onclick="closeSettings()">×</button>
+            </div>
+            <div class="form-group">
+                <label for="clubNameInput">구장명</label>
+                <input type="text" id="clubNameInput" placeholder="예: OO배드민턴장">
+            </div>
+            
+            <div class="firebase-setup">
+                <h3>☁️ 클라우드 동기화 (선택사항)</h3>
+                <p>Firebase 설정을 입력하면 모든 브라우저와 기기에서 데이터가 동기화됩니다.</p>
+                <div class="form-group">
+                    <label for="firebaseConfig">Firebase Config (JSON)</label>
+                    <textarea id="firebaseConfig" placeholder='{"apiKey": "your-api-key", "authDomain": "...", ...}'></textarea>
+                </div>
+                <button style="width: 100%; padding: 10px; background: #4285F4; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; margin-top: 10px;" onclick="connectFirebase()">Firebase 연결</button>
+            </div>
+            
+            <div class="modal-buttons" style="margin-top: 20px;">
+                <button style="background: #2196F3;" onclick="saveSettings()">저장</button>
+                <button style="background: #9E9E9E;" onclick="closeSettings()">취소</button>
+            </div>
+            <div style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #e0e0e0;">
+                <button style="width: 100%; padding: 12px; background: #f44336; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;" onclick="exportData()">📥 데이터 내보내기</button>
+                <button style="width: 100%; padding: 12px; background: #4CAF50; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; margin-top: 10px;" onclick="document.getElementById('importFile').click()">📤 데이터 가져오기</button>
+                <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importData(event)">
+            </div>
+        </div>
+    </div>
+
+    <!-- 삭제 확인 모달 -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <p>정말 삭제하시겠습니까?</p>
+            <div class="modal-buttons">
+                <button style="background: #f44336;" onclick="confirmDelete()">삭제</button>
+                <button style="background: #9E9E9E;" onclick="closeModal()">취소</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 알림 모달 -->
+    <div id="alertModal" class="modal">
+        <div class="modal-content">
+            <p id="alertMessage"></p>
+            <div class="modal-buttons">
+                <button style="background: #2196F3;" onclick="closeAlertModal()">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+
+    <script>
+        let members = [];
+        let filteredMembers = [];
+        let currentEditIndex = null;
+        let deleteIndex = null;
+        let currentSort = 'name';
+        let settings = {
+            clubName: '',
+            firebaseConfig: null
+        };
+        let firebaseDb = null;
+        let useFirebase = false;
+
+        // Firebase 초기화
+        function initFirebase() {
+            if (settings.firebaseConfig) {
+                try {
+                    if (!firebase.apps.length) {
+                        firebase.initializeApp(settings.firebaseConfig);
+                    }
+                    firebaseDb = firebase.database();
+                    useFirebase = true;
+                    document.getElementById('syncStatus').textContent = '☁️ 동기화';
+                    loadFromFirebase();
+                    listenToFirebaseChanges();
+                } catch (error) {
+                    console.error('Firebase 초기화 실패:', error);
+                    useFirebase = false;
+                    document.getElementById('syncStatus').textContent = '☁️ 로컬';
+                }
+            }
+        }
+
+        // Firebase에서 데이터 불러오기
+        function loadFromFirebase() {
+            if (!useFirebase) return;
+            
+            firebaseDb.ref('members').once('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    members = Object.values(data);
+                    filteredMembers = [...members];
+                    renderMembers();
+                }
+            });
+
+            firebaseDb.ref('settings').once('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data && data.clubName) {
+                    settings.clubName = data.clubName;
+                    applySettings();
+                }
+            });
+        }
+
+        // Firebase 실시간 동기화
+        function listenToFirebaseChanges() {
+            if (!useFirebase) return;
+            
+            firebaseDb.ref('members').on('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    members = Object.values(data);
+                    filteredMembers = [...members];
+                    renderMembers();
+                }
+            });
+        }
+
+        // Firebase에 저장
+        function saveToFirebase() {
+            if (!useFirebase) return;
+            
+            const membersObj = {};
+            members.forEach((member, index) => {
+                membersObj[index] = member;
+            });
+            
+            firebaseDb.ref('members').set(membersObj);
+            firebaseDb.ref('settings').set({
+                clubName: settings.clubName
+            });
+        }
+
+        // Firebase 연결
+        function connectFirebase() {
+            try {
+                const configText = document.getElementById('firebaseConfig').value.trim();
+                if (!configText) {
+                    showAlert('Firebase 설정을 입력해주세요!');
+                    return;
+                }
+                
+                const config = JSON.parse(configText);
+                settings.firebaseConfig = config;
+                saveSettingsToStorage();
+                
+                initFirebase();
+                showAlert('Firebase가 연결되었습니다!');
+            } catch (error) {
+                showAlert('잘못된 Firebase 설정입니다!');
+            }
+        }
+
+        // 로컬 스토리지에서 데이터 불러오기
+        function loadMembers() {
+            const savedSettings = localStorage.getItem('settings');
+            if (savedSettings) {
+                settings = JSON.parse(savedSettings);
+                applySettings();
+            }
+
+            // Firebase 설정이 있으면 Firebase 사용
+            if (settings.firebaseConfig) {
+                initFirebase();
+            } else {
+                // 없으면 로컬 스토리지 사용
+                const saved = localStorage.getItem('members');
+                if (saved) {
+                    members = JSON.parse(saved);
+                    filteredMembers = [...members];
+                    renderMembers();
+                }
+            }
+        }
+
+        // 설정 적용
+        function applySettings() {
+            if (settings.clubName) {
+                document.getElementById('clubNameDisplay').textContent = settings.clubName;
+            }
+            if (settings.firebaseConfig) {
+                document.getElementById('firebaseConfig').value = JSON.stringify(settings.firebaseConfig, null, 2);
+            }
+        }
+
+        // 로컬 스토리지에 데이터 저장
+        function saveMembers() {
+            if (useFirebase) {
+                saveToFirebase();
+            } else {
+                localStorage.setItem('members', JSON.stringify(members));
+            }
+        }
+
+        function saveSettingsToStorage() {
+            localStorage.setItem('settings', JSON.stringify(settings));
+        }
+
+        // 검색 기능
+        function searchMembers() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            
+            if (searchTerm === '') {
+                filteredMembers = [...members];
+            } else {
+                filteredMembers = members.filter(member => {
+                    return member.name.toLowerCase().includes(searchTerm) ||
+                           (member.phone && member.phone.includes(searchTerm));
+                });
+            }
+            
+            sortMembers(currentSort);
+        }
+
+        // 정렬 기능
+        function sortMembers(sortBy) {
+            currentSort = sortBy;
+            
+            // 버튼 활성화 상태 변경
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            switch(sortBy) {
+                case 'name':
+                    filteredMembers.sort((a, b) => a.name.localeCompare(b.name));
+                    break;
+                case 'joinDate':
+                    filteredMembers.sort((a, b) => {
+                        if (!a.joinDate) return 1;
+                        if (!b.joinDate) return -1;
+                        return new Date(b.joinDate) - new Date(a.joinDate);
+                    });
+                    break;
+                case 'fee':
+                    filteredMembers.sort((a, b) => (b.fee || 0) - (a.fee || 0));
+                    break;
+                case 'hours':
+                    filteredMembers.sort((a, b) => (b.hours || 0) - (a.hours || 0));
+                    break;
+            }
+            
+            renderMembers();
+        }
+
+        // 회원 목록 렌더링
+        function renderMembers() {
+            const listEl = document.getElementById('memberList');
+            const countEl = document.getElementById('memberCount');
+            
+            countEl.textContent = members.length;
+
+            if (filteredMembers.length === 0) {
+                listEl.innerHTML = `
+                    <div class="empty-state">
+                        <svg fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
+                        </svg>
+                        <p>${document.getElementById('searchInput').value ? '검색 결과가 없습니다' : '등록된 회원이 없습니다'}</p>
+                    </div>
+                `;
+                return;
+            }
+
+            listEl.innerHTML = filteredMembers.map((member, index) => {
+                const originalIndex = members.indexOf(member);
+                return `
+                <div class="member-card">
+                    <div class="member-header">
+                        <div class="member-name">${member.name}</div>
+                        <div class="member-actions">
+                            <button class="btn-edit" onclick="editMember(${originalIndex})">수정</button>
+                            <button class="btn-delete" onclick="showDeleteModal(${originalIndex})">삭제</button>
+                        </div>
+                    </div>
+                    <div class="member-info">
+                        ${member.phone ? `<div>📞 ${member.phone}</div>` : ''}
+                        ${member.joinDate ? `<div>📅 입장일: ${formatDate(member.joinDate)}</div>` : ''}
+                        ${member.email ? `<div>📧 ${member.email}</div>` : ''}
+                        ${member.address ? `<div>📍 ${member.address}</div>` : ''}
+                        <div style="margin-top: 8px;">
+                            ${member.fee ? `<span class="info-badge">💰 ${formatNumber(member.fee)}원</span>` : ''}
+                            ${member.hours ? `<span class="info-badge">⏰ ${member.hours}시간</span>` : ''}
+                        </div>
+                    </div>
+                </div>
+            `}).join('');
+        }
+
+        // 날짜 포맷
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')}`;
+        }
+
+        // 숫자 포맷 (천 단위 콤마)
+        function formatNumber(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        // 회원 추가
+        function addMember() {
+            const name = document.getElementById('name').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const joinDate = document.getElementById('joinDate').value;
+            const fee = document.getElementById('fee').value;
+            const hours = document.getElementById('hours').value;
+            const email = document.getElementById('email').value.trim();
+            const address = document.getElementById('address').value.trim();
+
+            if (!name) {
+                showAlert('이름을 입력해주세요!');
+                return;
+            }
+
+            const member = {
+                name,
+                phone,
+                joinDate,
+                fee: fee ? parseInt(fee) : null,
+                hours: hours ? parseInt(hours) : null,
+                email,
+                address
+            };
+
+            members.push(member);
+            saveMembers();
+            filteredMembers = [...members];
+            renderMembers();
+            clearForm();
+            showAlert('회원이 추가되었습니다!');
+        }
+
+        // 회원 수정
+        function updateMember() {
+            if (currentEditIndex === null) {
+                showAlert('수정할 회원을 선택해주세요!');
+                return;
+            }
+
+            const name = document.getElementById('name').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const joinDate = document.getElementById('joinDate').value;
+            const fee = document.getElementById('fee').value;
+            const hours = document.getElementById('hours').value;
+            const email = document.getElementById('email').value.trim();
+            const address = document.getElementById('address').value.trim();
+
+            if (!name) {
+                showAlert('이름을 입력해주세요!');
+                return;
+            }
+
+            members[currentEditIndex] = {
+                name,
+                phone,
+                joinDate,
+                fee: fee ? parseInt(fee) : null,
+                hours: hours ? parseInt(hours) : null,
+                email,
+                address
+            };
+
+            saveMembers();
+            filteredMembers = [...members];
+            renderMembers();
+            clearForm();
+            showAlert('회원 정보가 수정되었습니다!');
+        }
+
+        // 편집 모드
+        function editMember(index) {
+            const member = members[index];
+            document.getElementById('name').value = member.name;
+            document.getElementById('phone').value = member.phone || '';
+            document.getElementById('joinDate').value = member.joinDate || '';
+            document.getElementById('fee').value = member.fee || '';
+            document.getElementById('hours').value = member.hours || '';
+            document.getElementById('email').value = member.email || '';
+            document.getElementById('address').value = member.address || '';
+            currentEditIndex = index;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 삭제 모달 표시
+        function showDeleteModal(index) {
+            deleteIndex = index;
+            document.getElementById('deleteModal').classList.add('active');
+        }
+
+        // 삭제 확인
+        function confirmDelete() {
+            if (deleteIndex !== null) {
+                members.splice(deleteIndex, 1);
+                saveMembers();
+                filteredMembers = [...members];
+                renderMembers();
+                deleteIndex = null;
+                closeModal();
+                showAlert('회원이 삭제되었습니다!');
+            }
+        }
+
+        // 모달 닫기
+        function closeModal() {
+            document.getElementById('deleteModal').classList.remove('active');
+        }
+
+        // 알림 표시
+        function showAlert(message) {
+            document.getElementById('alertMessage').textContent = message;
+            document.getElementById('alertModal').classList.add('active');
+        }
+
+        // 알림 모달 닫기
+        function closeAlertModal() {
+            document.getElementById('alertModal').classList.remove('active');
+        }
+
+        // 폼 초기화
+        function clearForm() {
+            document.getElementById('name').value = '';
+            document.getElementById('phone').value = '';
+            document.getElementById('joinDate').value = '';
+            document.getElementById('fee').value = '';
+            document.getElementById('hours').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('address').value = '';
+            currentEditIndex = null;
+        }
+
+        // 설정 모달 열기
+        function openSettings() {
+            document.getElementById('clubNameInput').value = settings.clubName || '';
+            if (settings.firebaseConfig) {
+                document.getElementById('firebaseConfig').value = JSON.stringify(settings.firebaseConfig, null, 2);
+            }
+            document.getElementById('settingsModal').classList.add('active');
+        }
+
+        // 설정 모달 닫기
+        function closeSettings() {
+            document.getElementById('settingsModal').classList.remove('active');
+        }
+
+        // 설정 저장
+        function saveSettings() {
+            settings.clubName = document.getElementById('clubNameInput').value.trim();
+            
+            saveSettingsToStorage();
+            if (useFirebase) {
+                saveToFirebase();
+            }
+            applySettings();
+            closeSettings();
+            showAlert('설정이 저장되었습니다!');
+        }
+
+        // 데이터 내보내기
+        function exportData() {
+            const data = {
+                members: members,
+                settings: settings,
+                exportDate: new Date().toISOString()
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `회원데이터_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            showAlert('데이터가 내보내기되었습니다!');
+        }
+
+        // 데이터 가져오기
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    
+                    if (data.members) {
+                        members = data.members;
+                        filteredMembers = [...members];
+                        saveMembers();
+                    }
+                    
+                    if (data.settings && data.settings.clubName) {
+                        settings.clubName = data.settings.clubName;
+                        saveSettingsToStorage();
+                        applySettings();
+                    }
+                    
+                    renderMembers();
+                    closeSettings();
+                    showAlert('데이터를 성공적으로 가져왔습니다!');
+                } catch (error) {
+                    showAlert('잘못된 파일 형식입니다!');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // 페이지 로드 시 데이터 불러오기
+        loadMembers();
+        
+        // 오늘 날짜를 기본값으로 설정
+        document.getElementById('joinDate').valueAsDate = new Date();
+    </script>
+</body>
+</html>
