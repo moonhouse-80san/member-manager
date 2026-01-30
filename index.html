@@ -92,7 +92,6 @@
             fill: white;
         }
 
-        /* 검색 및 정렬 섹션 */
         .search-section {
             padding: 15px 20px;
             background: #f8f9fa;
@@ -167,17 +166,16 @@
             font-size: 14px;
         }
 
-        .form-group input, .form-group textarea {
+        .form-group input {
             width: 100%;
             padding: 12px;
             border: 2px solid #e0e0e0;
             border-radius: 10px;
             font-size: 16px;
             transition: border-color 0.3s;
-            font-family: inherit;
         }
 
-        .form-group input:focus, .form-group textarea:focus {
+        .form-group input:focus {
             outline: none;
             border-color: #2196F3;
         }
@@ -301,7 +299,6 @@
             opacity: 0.3;
         }
 
-        /* 설정 모달 */
         .modal {
             display: none;
             position: fixed;
@@ -371,37 +368,6 @@
             color: white;
         }
 
-        .firebase-setup {
-            background: #fff3cd;
-            border: 2px solid #ffc107;
-            border-radius: 10px;
-            padding: 15px;
-            margin-top: 15px;
-        }
-
-        .firebase-setup h3 {
-            color: #856404;
-            margin-bottom: 10px;
-            font-size: 16px;
-        }
-
-        .firebase-setup p {
-            color: #856404;
-            font-size: 13px;
-            margin-bottom: 10px;
-        }
-
-        .firebase-setup textarea {
-            width: 100%;
-            height: 80px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-family: monospace;
-            font-size: 12px;
-        }
-
-        /* 스크롤바 스타일 */
         .list-section::-webkit-scrollbar {
             width: 8px;
         }
@@ -415,7 +381,6 @@
             border-radius: 4px;
         }
 
-        /* 애니메이션 */
         @keyframes slideIn {
             from {
                 opacity: 0;
@@ -431,7 +396,6 @@
             animation: slideIn 0.3s ease;
         }
 
-        /* 반응형 */
         @media (max-width: 600px) {
             .form-grid {
                 grid-template-columns: 1fr;
@@ -450,7 +414,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <div class="sync-status" id="syncStatus">☁️ 로컬</div>
+            <div class="sync-status" id="syncStatus">☁️ 동기화</div>
             <div class="settings-icon" onclick="openSettings()">
                 <svg viewBox="0 0 24 24">
                     <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/>
@@ -461,7 +425,6 @@
             <div class="member-count">총 <span id="memberCount">0</span>명</div>
         </div>
 
-        <!-- 검색 및 정렬 섹션 -->
         <div class="search-section">
             <div class="search-box">
                 <input type="text" id="searchInput" placeholder="🔍 이름, 전화번호로 검색..." onkeyup="searchMembers()">
@@ -522,7 +485,6 @@
         </div>
     </div>
 
-    <!-- 설정 모달 -->
     <div id="settingsModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -533,17 +495,6 @@
                 <label for="clubNameInput">구장명</label>
                 <input type="text" id="clubNameInput" placeholder="예: OO배드민턴장">
             </div>
-            
-            <div class="firebase-setup">
-                <h3>☁️ 클라우드 동기화 (선택사항)</h3>
-                <p>Firebase 설정을 입력하면 모든 브라우저와 기기에서 데이터가 동기화됩니다.</p>
-                <div class="form-group">
-                    <label for="firebaseConfig">Firebase Config (JSON)</label>
-                    <textarea id="firebaseConfig" placeholder='{"apiKey": "your-api-key", "authDomain": "...", ...}'></textarea>
-                </div>
-                <button style="width: 100%; padding: 10px; background: #4285F4; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; margin-top: 10px;" onclick="connectFirebase()">Firebase 연결</button>
-            </div>
-            
             <div class="modal-buttons" style="margin-top: 20px;">
                 <button style="background: #2196F3;" onclick="saveSettings()">저장</button>
                 <button style="background: #9E9E9E;" onclick="closeSettings()">취소</button>
@@ -556,7 +507,6 @@
         </div>
     </div>
 
-    <!-- 삭제 확인 모달 -->
     <div id="deleteModal" class="modal">
         <div class="modal-content">
             <p>정말 삭제하시겠습니까?</p>
@@ -567,7 +517,6 @@
         </div>
     </div>
 
-    <!-- 알림 모달 -->
     <div id="alertModal" class="modal">
         <div class="modal-content">
             <p id="alertMessage"></p>
@@ -577,47 +526,41 @@
         </div>
     </div>
 
-    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 
     <script>
+        // Firebase 설정 (자동으로 연결됨)
+        const firebaseConfig = {
+            apiKey: "AIzaSyBgm--0drSAB0iL_ttDsSpvwIAjQcuX0mo",
+            authDomain: "member-manager-27fb7.firebaseapp.com",
+            databaseURL: "https://member-manager-27fb7-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "member-manager-27fb7",
+            storageBucket: "member-manager-27fb7.firebasestorage.app",
+            messagingSenderId: "491275172165",
+            appId: "1:491275172165:web:c4b024556ad26b9b69662c",
+            measurementId: "G-2KMF6CDJ2C"
+        };
+
         let members = [];
         let filteredMembers = [];
         let currentEditIndex = null;
         let deleteIndex = null;
         let currentSort = 'name';
-        let settings = {
-            clubName: '',
-            firebaseConfig: null
-        };
+        let settings = { clubName: '' };
         let firebaseDb = null;
-        let useFirebase = false;
 
-        // Firebase 초기화
-        function initFirebase() {
-            if (settings.firebaseConfig) {
-                try {
-                    if (!firebase.apps.length) {
-                        firebase.initializeApp(settings.firebaseConfig);
-                    }
-                    firebaseDb = firebase.database();
-                    useFirebase = true;
-                    document.getElementById('syncStatus').textContent = '☁️ 동기화';
-                    loadFromFirebase();
-                    listenToFirebaseChanges();
-                } catch (error) {
-                    console.error('Firebase 초기화 실패:', error);
-                    useFirebase = false;
-                    document.getElementById('syncStatus').textContent = '☁️ 로컬';
-                }
-            }
+        // Firebase 자동 초기화
+        try {
+            firebase.initializeApp(firebaseConfig);
+            firebaseDb = firebase.database();
+            loadFromFirebase();
+            listenToFirebaseChanges();
+        } catch (error) {
+            console.error('Firebase 초기화 실패:', error);
         }
 
-        // Firebase에서 데이터 불러오기
         function loadFromFirebase() {
-            if (!useFirebase) return;
-            
             firebaseDb.ref('members').once('value', (snapshot) => {
                 const data = snapshot.val();
                 if (data) {
@@ -631,15 +574,12 @@
                 const data = snapshot.val();
                 if (data && data.clubName) {
                     settings.clubName = data.clubName;
-                    applySettings();
+                    document.getElementById('clubNameDisplay').textContent = data.clubName;
                 }
             });
         }
 
-        // Firebase 실시간 동기화
         function listenToFirebaseChanges() {
-            if (!useFirebase) return;
-            
             firebaseDb.ref('members').on('value', (snapshot) => {
                 const data = snapshot.val();
                 if (data) {
@@ -650,87 +590,16 @@
             });
         }
 
-        // Firebase에 저장
         function saveToFirebase() {
-            if (!useFirebase) return;
-            
             const membersObj = {};
             members.forEach((member, index) => {
                 membersObj[index] = member;
             });
             
             firebaseDb.ref('members').set(membersObj);
-            firebaseDb.ref('settings').set({
-                clubName: settings.clubName
-            });
+            firebaseDb.ref('settings').set(settings);
         }
 
-        // Firebase 연결
-        function connectFirebase() {
-            try {
-                const configText = document.getElementById('firebaseConfig').value.trim();
-                if (!configText) {
-                    showAlert('Firebase 설정을 입력해주세요!');
-                    return;
-                }
-                
-                const config = JSON.parse(configText);
-                settings.firebaseConfig = config;
-                saveSettingsToStorage();
-                
-                initFirebase();
-                showAlert('Firebase가 연결되었습니다!');
-            } catch (error) {
-                showAlert('잘못된 Firebase 설정입니다!');
-            }
-        }
-
-        // 로컬 스토리지에서 데이터 불러오기
-        function loadMembers() {
-            const savedSettings = localStorage.getItem('settings');
-            if (savedSettings) {
-                settings = JSON.parse(savedSettings);
-                applySettings();
-            }
-
-            // Firebase 설정이 있으면 Firebase 사용
-            if (settings.firebaseConfig) {
-                initFirebase();
-            } else {
-                // 없으면 로컬 스토리지 사용
-                const saved = localStorage.getItem('members');
-                if (saved) {
-                    members = JSON.parse(saved);
-                    filteredMembers = [...members];
-                    renderMembers();
-                }
-            }
-        }
-
-        // 설정 적용
-        function applySettings() {
-            if (settings.clubName) {
-                document.getElementById('clubNameDisplay').textContent = settings.clubName;
-            }
-            if (settings.firebaseConfig) {
-                document.getElementById('firebaseConfig').value = JSON.stringify(settings.firebaseConfig, null, 2);
-            }
-        }
-
-        // 로컬 스토리지에 데이터 저장
-        function saveMembers() {
-            if (useFirebase) {
-                saveToFirebase();
-            } else {
-                localStorage.setItem('members', JSON.stringify(members));
-            }
-        }
-
-        function saveSettingsToStorage() {
-            localStorage.setItem('settings', JSON.stringify(settings));
-        }
-
-        // 검색 기능
         function searchMembers() {
             const searchTerm = document.getElementById('searchInput').value.toLowerCase();
             
@@ -746,11 +615,9 @@
             sortMembers(currentSort);
         }
 
-        // 정렬 기능
         function sortMembers(sortBy) {
             currentSort = sortBy;
             
-            // 버튼 활성화 상태 변경
             document.querySelectorAll('.filter-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
@@ -778,7 +645,6 @@
             renderMembers();
         }
 
-        // 회원 목록 렌더링
         function renderMembers() {
             const listEl = document.getElementById('memberList');
             const countEl = document.getElementById('memberCount');
@@ -822,18 +688,15 @@
             `}).join('');
         }
 
-        // 날짜 포맷
         function formatDate(dateString) {
             const date = new Date(dateString);
             return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')}`;
         }
 
-        // 숫자 포맷 (천 단위 콤마)
         function formatNumber(num) {
             return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         }
 
-        // 회원 추가
         function addMember() {
             const name = document.getElementById('name').value.trim();
             const phone = document.getElementById('phone').value.trim();
@@ -859,14 +722,13 @@
             };
 
             members.push(member);
-            saveMembers();
+            saveToFirebase();
             filteredMembers = [...members];
             renderMembers();
             clearForm();
             showAlert('회원이 추가되었습니다!');
         }
 
-        // 회원 수정
         function updateMember() {
             if (currentEditIndex === null) {
                 showAlert('수정할 회원을 선택해주세요!');
@@ -896,14 +758,13 @@
                 address
             };
 
-            saveMembers();
+            saveToFirebase();
             filteredMembers = [...members];
             renderMembers();
             clearForm();
             showAlert('회원 정보가 수정되었습니다!');
         }
 
-        // 편집 모드
         function editMember(index) {
             const member = members[index];
             document.getElementById('name').value = member.name;
@@ -917,17 +778,15 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // 삭제 모달 표시
         function showDeleteModal(index) {
             deleteIndex = index;
             document.getElementById('deleteModal').classList.add('active');
         }
 
-        // 삭제 확인
         function confirmDelete() {
             if (deleteIndex !== null) {
                 members.splice(deleteIndex, 1);
-                saveMembers();
+                saveToFirebase();
                 filteredMembers = [...members];
                 renderMembers();
                 deleteIndex = null;
@@ -936,23 +795,19 @@
             }
         }
 
-        // 모달 닫기
         function closeModal() {
             document.getElementById('deleteModal').classList.remove('active');
         }
 
-        // 알림 표시
         function showAlert(message) {
             document.getElementById('alertMessage').textContent = message;
             document.getElementById('alertModal').classList.add('active');
         }
 
-        // 알림 모달 닫기
         function closeAlertModal() {
             document.getElementById('alertModal').classList.remove('active');
         }
 
-        // 폼 초기화
         function clearForm() {
             document.getElementById('name').value = '';
             document.getElementById('phone').value = '';
@@ -964,34 +819,25 @@
             currentEditIndex = null;
         }
 
-        // 설정 모달 열기
         function openSettings() {
             document.getElementById('clubNameInput').value = settings.clubName || '';
-            if (settings.firebaseConfig) {
-                document.getElementById('firebaseConfig').value = JSON.stringify(settings.firebaseConfig, null, 2);
-            }
             document.getElementById('settingsModal').classList.add('active');
         }
 
-        // 설정 모달 닫기
         function closeSettings() {
             document.getElementById('settingsModal').classList.remove('active');
         }
 
-        // 설정 저장
         function saveSettings() {
             settings.clubName = document.getElementById('clubNameInput').value.trim();
-            
-            saveSettingsToStorage();
-            if (useFirebase) {
-                saveToFirebase();
+            saveToFirebase();
+            if (settings.clubName) {
+                document.getElementById('clubNameDisplay').textContent = settings.clubName;
             }
-            applySettings();
             closeSettings();
             showAlert('설정이 저장되었습니다!');
         }
 
-        // 데이터 내보내기
         function exportData() {
             const data = {
                 members: members,
@@ -1010,7 +856,6 @@
             showAlert('데이터가 내보내기되었습니다!');
         }
 
-        // 데이터 가져오기
         function importData(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -1023,13 +868,12 @@
                     if (data.members) {
                         members = data.members;
                         filteredMembers = [...members];
-                        saveMembers();
+                        saveToFirebase();
                     }
                     
                     if (data.settings && data.settings.clubName) {
                         settings.clubName = data.settings.clubName;
-                        saveSettingsToStorage();
-                        applySettings();
+                        document.getElementById('clubNameDisplay').textContent = settings.clubName;
                     }
                     
                     renderMembers();
@@ -1042,10 +886,6 @@
             reader.readAsText(file);
         }
 
-        // 페이지 로드 시 데이터 불러오기
-        loadMembers();
-        
-        // 오늘 날짜를 기본값으로 설정
         document.getElementById('joinDate').valueAsDate = new Date();
     </script>
 </body>
