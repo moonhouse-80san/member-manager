@@ -553,6 +553,47 @@
             font-size: 14px;
         }
 
+        .success-message {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            z-index: 1001;
+            animation: slideInRight 0.3s ease, fadeOut 0.5s ease 2s forwards;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .success-message.hidden {
+            display: none;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+                display: none;
+            }
+        }
+
         .content-section::-webkit-scrollbar {
             width: 8px;
         }
@@ -753,6 +794,14 @@
         </div>
     </div>
 
+    <!-- 성공 메시지 팝업 -->
+    <div id="successMessage" class="success-message hidden">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+        </svg>
+        <span id="successMessageText"></span>
+    </div>
+
     <div id="passwordModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -761,7 +810,7 @@
             </div>
             <p>설정을 열려면 비밀번호를 입력해주세요.</p>
             <div class="password-input">
-                <input type="password" id="passwordInput" placeholder="비밀번호 입력" onkeyup="if(event.key === 'Enter') checkPassword()">
+                <input type="password" id="passwordInput" placeholder="비밀번호 입력 (기본: 0000)" onkeyup="if(event.key === 'Enter') checkPassword()">
             </div>
             <div class="modal-buttons">
                 <button style="background: #2196F3;" onclick="checkPassword()">확인</button>
@@ -1003,6 +1052,20 @@
             });
         }
 
+        // 성공 메시지 표시 함수
+        function showSuccessMessage(message) {
+            const successEl = document.getElementById('successMessage');
+            const messageEl = document.getElementById('successMessageText');
+            
+            messageEl.textContent = message;
+            successEl.classList.remove('hidden');
+            
+            // 2초 후 자동으로 사라짐
+            setTimeout(() => {
+                successEl.classList.add('hidden');
+            }, 2000);
+        }
+
         function searchMembers() {
             const searchTerm = document.getElementById('searchInput').value.toLowerCase();
             
@@ -1068,6 +1131,7 @@
                 const phoneLink = member.phone ? 
                     `<div><a href="tel:${member.phone.replace(/-/g, '')}" class="phone-link">📞 ${member.phone}</a></div>` : '';
                 
+                // 개인 스케줄 배지 생성
                 let scheduleBadges = '';
                 if (member.day1 && member.startTime1 && member.endTime1) {
                     scheduleBadges += `<span class="schedule-badge">${dayNames[member.day1]} ${member.startTime1}~${member.endTime1}</span>`;
@@ -1131,7 +1195,7 @@
             // 시간별로 정렬하고 같은 시간대의 회원들을 그룹화
             let scheduleHTML = '';
             
-            daysOfWeek.forEach(day => {
+            daysOfWeek.forEach(day) => {
                 const dayMembers = scheduleByDay[day];
                 
                 // 시간대별로 그룹화
@@ -1270,7 +1334,7 @@
             renderMembers();
             renderSchedule();
             clearForm();
-            showAlert('회원이 추가되었습니다!');
+            showSuccessMessage('회원이 추가되었습니다!');
         }
 
         function updateMember() {
@@ -1351,7 +1415,7 @@
             renderMembers();
             renderSchedule();
             clearForm();
-            showAlert('회원 정보가 수정되었습니다!');
+            showSuccessMessage('회원 정보가 수정되었습니다!');
         }
 
         function editMember(index) {
@@ -1386,7 +1450,7 @@
                 renderSchedule();
                 deleteIndex = null;
                 closeModal();
-                showAlert('회원이 삭제되었습니다!');
+                showSuccessMessage('회원이 삭제되었습니다!');
             }
         }
 
@@ -1500,7 +1564,7 @@
             }
             updateFeePresetButtons();
             closeSettings();
-            showAlert('설정이 저장되었습니다!');
+            showSuccessMessage('설정이 저장되었습니다!');
         }
 
         function exportData() {
@@ -1518,7 +1582,7 @@
             a.click();
             URL.revokeObjectURL(url);
             
-            showAlert('데이터가 내보내기되었습니다!');
+            showSuccessMessage('데이터가 내보내기되었습니다!');
         }
 
         function importData(event) {
@@ -1553,7 +1617,7 @@
                     renderMembers();
                     renderSchedule();
                     closeSettings();
-                    showAlert('데이터를 성공적으로 가져왔습니다!');
+                    showSuccessMessage('데이터를 성공적으로 가져왔습니다!');
                 } catch (error) {
                     showAlert('잘못된 파일 형식입니다!');
                 }
