@@ -829,10 +829,6 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 
     <script>
-		if ('serviceWorker' in navigator) {
-			navigator.serviceWorker.register('sw.js');  // 삭제
-		}
-
         // Firebase 설정 (자동으로 연결됨)
         const firebaseConfig = {
             apiKey: "AIzaSyBgm--0drSAB0iL_ttDsSpvwIAjQcuX0mo",
@@ -852,7 +848,7 @@
         let currentSort = 'name';
         let settings = { 
             clubName: '',
-            feePresets: [40000, 70000, 100000, 200000, 300000],
+            feePresets: [100000, 150000, 200000, 250000, 300000],
             adminPassword: '0000'
         };
         let firebaseDb = null;
