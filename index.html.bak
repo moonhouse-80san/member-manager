@@ -182,59 +182,17 @@
             border-color: #2196F3;
         }
 
-        .time-group {
+        .time-inputs {
             display: grid;
             grid-template-columns: 1fr auto 1fr;
             gap: 10px;
             align-items: center;
         }
 
-        .time-group span {
+        .time-inputs span {
             text-align: center;
             font-weight: bold;
             color: #666;
-        }
-
-        .schedule-section-header {
-            font-size: 14px;
-            font-weight: 600;
-            color: #2196F3;
-            margin: 15px 0 10px 0;
-            padding-bottom: 5px;
-            border-bottom: 2px solid #e0e0e0;
-        }
-
-        .fee-presets {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 5px;
-        }
-
-        .fee-preset-btn {
-            padding: 6px 12px;
-            background: #f0f0f0;
-            border: 2px solid #e0e0e0;
-            border-radius: 6px;
-            font-size: 12px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .fee-preset-btn:hover {
-            background: #e0e0e0;
-        }
-
-        .phone-link {
-            color: #1976D2;
-            text-decoration: none;
-            cursor: pointer;
-            transition: color 0.3s;
-        }
-
-        .phone-link:hover {
-            color: #0d47a1;
-            text-decoration: underline;
         }
 
         .button-group {
@@ -541,18 +499,6 @@
             color: white;
         }
 
-        .password-input {
-            margin-bottom: 15px;
-        }
-
-        .password-input input {
-            width: 100%;
-            padding: 10px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 14px;
-        }
-
         .content-section::-webkit-scrollbar {
             width: 8px;
         }
@@ -598,12 +544,12 @@
                 font-size: 11px;
             }
 
-            .time-group {
+            .time-inputs {
                 grid-template-columns: 1fr;
                 grid-template-rows: auto auto auto;
             }
 
-            .time-group span {
+            .time-inputs span {
                 order: 2;
             }
         }
@@ -629,7 +575,7 @@
             </div>
             <div class="filter-buttons">
                 <button class="filter-btn active" onclick="sortMembers('name')">이름순</button>
-                <button class="filter-btn" onclick="sortMembers('registerDate')">등록일순</button>
+                <button class="filter-btn" onclick="sortMembers('joinDate')">입장일순</button>
                 <button class="filter-btn" onclick="sortMembers('fee')">회비순</button>
             </div>
         </div>
@@ -645,73 +591,34 @@
                     <input type="tel" id="phone" placeholder="010-1234-5678">
                 </div>
                 <div class="form-group">
-                    <label for="registerDate">회원등록일</label>
-                    <input type="date" id="registerDate">
+                    <label for="joinDate">입장일</label>
+                    <input type="date" id="joinDate">
                 </div>
                 <div class="form-group">
                     <label for="fee">월회비 (원)</label>
-                    <input type="number" id="fee" placeholder="회비 입력">
-                    <div class="fee-presets" id="feePresets">
-                        <!-- 회비 기본값 버튼들이 여기에 생성됩니다 -->
-                    </div>
+                    <input type="number" id="fee" placeholder="100000">
                 </div>
-                
-                <!-- 첫 번째 스케줄 -->
+                <div class="form-group">
+                    <label for="dayOfWeek">요일</label>
+                    <select id="dayOfWeek">
+                        <option value="">요일 선택</option>
+                        <option value="월">월요일</option>
+                        <option value="화">화요일</option>
+                        <option value="수">수요일</option>
+                        <option value="목">목요일</option>
+                        <option value="금">금요일</option>
+                        <option value="토">토요일</option>
+                        <option value="일">일요일</option>
+                    </select>
+                </div>
                 <div class="form-group full-width">
-                    <div class="schedule-section-header">📅 스케줄 1</div>
-                    <div class="form-grid" style="grid-template-columns: 1fr 2fr; margin-bottom: 10px;">
-                        <div class="form-group">
-                            <label for="day1">요일</label>
-                            <select id="day1">
-                                <option value="">요일 선택</option>
-                                <option value="월">월요일</option>
-                                <option value="화">화요일</option>
-                                <option value="수">수요일</option>
-                                <option value="목">목요일</option>
-                                <option value="금">금요일</option>
-                                <option value="토">토요일</option>
-                                <option value="일">일요일</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>시간</label>
-                            <div class="time-group">
-                                <input type="time" id="startTime1" step="300">
-                                <span>~</span>
-                                <input type="time" id="endTime1" step="300">
-                            </div>
-                        </div>
+                    <label>시간</label>
+                    <div class="time-inputs">
+                        <input type="time" id="startTime" step="300">
+                        <span>~</span>
+                        <input type="time" id="endTime" step="300">
                     </div>
                 </div>
-                
-                <!-- 두 번째 스케줄 -->
-                <div class="form-group full-width">
-                    <div class="schedule-section-header">📅 스케줄 2</div>
-                    <div class="form-grid" style="grid-template-columns: 1fr 2fr; margin-bottom: 10px;">
-                        <div class="form-group">
-                            <label for="day2">요일</label>
-                            <select id="day2">
-                                <option value="">요일 선택</option>
-                                <option value="월">월요일</option>
-                                <option value="화">화요일</option>
-                                <option value="수">수요일</option>
-                                <option value="목">목요일</option>
-                                <option value="금">금요일</option>
-                                <option value="토">토요일</option>
-                                <option value="일">일요일</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>시간</label>
-                            <div class="time-group">
-                                <input type="time" id="startTime2" step="300">
-                                <span>~</span>
-                                <input type="time" id="endTime2" step="300">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
                 <div class="form-group">
                     <label for="email">이메일</label>
                     <input type="email" id="email" placeholder="example@email.com">
@@ -753,23 +660,6 @@
         </div>
     </div>
 
-    <div id="passwordModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>🔒 비밀번호 입력</h2>
-                <button class="close-btn" onclick="closePasswordModal()">×</button>
-            </div>
-            <p>설정을 열려면 비밀번호를 입력해주세요.</p>
-            <div class="password-input">
-                <input type="password" id="passwordInput" placeholder="비밀번호 입력 (기본: 0000)" onkeyup="if(event.key === 'Enter') checkPassword()">
-            </div>
-            <div class="modal-buttons">
-                <button style="background: #2196F3;" onclick="checkPassword()">확인</button>
-                <button style="background: #9E9E9E;" onclick="closePasswordModal()">취소</button>
-            </div>
-        </div>
-    </div>
-
     <div id="settingsModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -779,20 +669,6 @@
             <div class="form-group">
                 <label for="clubNameInput">구장명</label>
                 <input type="text" id="clubNameInput" placeholder="예: OO배드민턴장">
-            </div>
-            <div class="form-group">
-                <label>월회비 기본값 설정</label>
-                <div class="fee-presets" style="margin-top: 10px;">
-                    <input type="number" id="feePreset1" placeholder="기본값 1" style="margin-bottom: 5px;">
-                    <input type="number" id="feePreset2" placeholder="기본값 2" style="margin-bottom: 5px;">
-                    <input type="number" id="feePreset3" placeholder="기본값 3" style="margin-bottom: 5px;">
-                    <input type="number" id="feePreset4" placeholder="기본값 4" style="margin-bottom: 5px;">
-                    <input type="number" id="feePreset5" placeholder="기본값 5" style="margin-bottom: 5px;">
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="adminPassword">관리자 비밀번호</label>
-                <input type="password" id="adminPassword" placeholder="새 비밀번호 입력">
             </div>
             <div class="modal-buttons" style="margin-top: 20px;">
                 <button style="background: #2196F3;" onclick="saveSettings()">저장</button>
@@ -846,11 +722,7 @@
         let currentEditIndex = null;
         let deleteIndex = null;
         let currentSort = 'name';
-        let settings = { 
-            clubName: '',
-            feePresets: [100000, 150000, 200000, 250000, 300000],
-            adminPassword: '0000'
-        };
+        let settings = { clubName: '' };
         let firebaseDb = null;
 
         // 요일 배열
@@ -888,13 +760,9 @@
 
             firebaseDb.ref('settings').once('value', (snapshot) => {
                 const data = snapshot.val();
-                if (data) {
-                    if (data.clubName) settings.clubName = data.clubName;
-                    if (data.feePresets) settings.feePresets = data.feePresets;
-                    if (data.adminPassword) settings.adminPassword = data.adminPassword;
-                    
-                    document.getElementById('clubNameDisplay').textContent = settings.clubName || '구장명을 설정하세요';
-                    updateFeePresetButtons();
+                if (data && data.clubName) {
+                    settings.clubName = data.clubName;
+                    document.getElementById('clubNameDisplay').textContent = data.clubName;
                 }
             });
         }
@@ -921,86 +789,26 @@
             firebaseDb.ref('settings').set(settings);
         }
 
-        // 시간 충돌 검사 함수 (2개의 스케줄 모두 검사)
-        function checkTimeConflict(day1, startTime1, endTime1, day2, startTime2, endTime2, excludeIndex = null) {
+        // 시간 충돌 검사 함수
+        function checkTimeConflict(day, startTime, endTime, excludeIndex = null) {
             for (let i = 0; i < members.length; i++) {
                 if (excludeIndex !== null && i === excludeIndex) continue;
                 
                 const member = members[i];
-                
-                // 첫 번째 스케줄 충돌 검사
-                if (member.day1 === day1 && member.startTime1 && member.endTime1) {
-                    if ((startTime1 >= member.startTime1 && startTime1 < member.endTime1) ||
-                        (endTime1 > member.startTime1 && endTime1 <= member.endTime1) ||
-                        (startTime1 <= member.startTime1 && endTime1 >= member.endTime1)) {
+                if (member.day === day && member.startTime && member.endTime) {
+                    // 시간 비교 (문자열로 비교)
+                    if ((startTime >= member.startTime && startTime < member.endTime) ||
+                        (endTime > member.startTime && endTime <= member.endTime) ||
+                        (startTime <= member.startTime && endTime >= member.endTime)) {
                         return {
                             conflict: true,
                             memberName: member.name,
-                            existingTime: `${dayNames[member.day1]} ${member.startTime1}~${member.endTime1}`
+                            existingTime: `${member.startTime}~${member.endTime}`
                         };
-                    }
-                }
-                
-                // 두 번째 스케줄 충돌 검사
-                if (member.day2 === day1 && member.startTime2 && member.endTime2) {
-                    if ((startTime1 >= member.startTime2 && startTime1 < member.endTime2) ||
-                        (endTime1 > member.startTime2 && endTime1 <= member.endTime2) ||
-                        (startTime1 <= member.startTime2 && endTime1 >= member.endTime2)) {
-                        return {
-                            conflict: true,
-                            memberName: member.name,
-                            existingTime: `${dayNames[member.day2]} ${member.startTime2}~${member.endTime2}`
-                        };
-                    }
-                }
-                
-                // 두 번째 입력에 대한 검사 (day1 대신 day2 사용)
-                if (day2) {
-                    if (member.day1 === day2 && member.startTime1 && member.endTime1) {
-                        if ((startTime2 >= member.startTime1 && startTime2 < member.endTime1) ||
-                            (endTime2 > member.startTime1 && endTime2 <= member.endTime1) ||
-                            (startTime2 <= member.startTime1 && endTime2 >= member.endTime1)) {
-                            return {
-                                conflict: true,
-                                memberName: member.name,
-                                existingTime: `${dayNames[member.day1]} ${member.startTime1}~${member.endTime1}`
-                            };
-                        }
-                    }
-                    
-                    if (member.day2 === day2 && member.startTime2 && member.endTime2) {
-                        if ((startTime2 >= member.startTime2 && startTime2 < member.endTime2) ||
-                            (endTime2 > member.startTime2 && endTime2 <= member.endTime2) ||
-                            (startTime2 <= member.startTime2 && endTime2 >= member.endTime2)) {
-                            return {
-                                conflict: true,
-                                memberName: member.name,
-                                existingTime: `${dayNames[member.day2]} ${member.startTime2}~${member.endTime2}`
-                            };
-                        }
                     }
                 }
             }
             return { conflict: false };
-        }
-
-        // 회비 기본값 버튼 업데이트
-        function updateFeePresetButtons() {
-            const feePresetsEl = document.getElementById('feePresets');
-            feePresetsEl.innerHTML = '';
-            
-            settings.feePresets.forEach((fee, index) => {
-                if (fee) {
-                    const button = document.createElement('button');
-                    button.type = 'button';
-                    button.className = 'fee-preset-btn';
-                    button.textContent = `${formatNumber(fee)}원`;
-                    button.onclick = () => {
-                        document.getElementById('fee').value = fee;
-                    };
-                    feePresetsEl.appendChild(button);
-                }
-            });
         }
 
         function searchMembers() {
@@ -1030,11 +838,11 @@
                 case 'name':
                     filteredMembers.sort((a, b) => a.name.localeCompare(b.name));
                     break;
-                case 'registerDate':
+                case 'joinDate':
                     filteredMembers.sort((a, b) => {
-                        if (!a.registerDate) return 1;
-                        if (!b.registerDate) return -1;
-                        return new Date(b.registerDate) - new Date(a.registerDate);
+                        if (!a.joinDate) return 1;
+                        if (!b.joinDate) return -1;
+                        return new Date(b.joinDate) - new Date(a.joinDate);
                     });
                     break;
                 case 'fee':
@@ -1065,17 +873,6 @@
 
             listEl.innerHTML = filteredMembers.map((member, index) => {
                 const originalIndex = members.indexOf(member);
-                const phoneLink = member.phone ? 
-                    `<div><a href="tel:${member.phone.replace(/-/g, '')}" class="phone-link">📞 ${member.phone}</a></div>` : '';
-                
-                let scheduleBadges = '';
-                if (member.day1 && member.startTime1 && member.endTime1) {
-                    scheduleBadges += `<span class="schedule-badge">${dayNames[member.day1]} ${member.startTime1}~${member.endTime1}</span>`;
-                }
-                if (member.day2 && member.startTime2 && member.endTime2) {
-                    scheduleBadges += `<span class="schedule-badge">${dayNames[member.day2]} ${member.startTime2}~${member.endTime2}</span>`;
-                }
-                
                 return `
                 <div class="member-card">
                     <div class="member-header">
@@ -1086,20 +883,20 @@
                         </div>
                     </div>
                     <div class="member-info">
-                        ${phoneLink}
-                        ${member.registerDate ? `<div>📅 등록일: ${formatDate(member.registerDate)}</div>` : ''}
+                        ${member.phone ? `<div>📞 ${member.phone}</div>` : ''}
+                        ${member.joinDate ? `<div>📅 입장일: ${formatDate(member.joinDate)}</div>` : ''}
                         ${member.email ? `<div>📧 ${member.email}</div>` : ''}
                         ${member.address ? `<div>📍 ${member.address}</div>` : ''}
                         <div style="margin-top: 8px;">
                             ${member.fee ? `<span class="info-badge">💰 ${formatNumber(member.fee)}원</span>` : ''}
-                            ${scheduleBadges}
+                            ${member.day ? `<span class="schedule-badge">${dayNames[member.day]} ${member.startTime}~${member.endTime}</span>` : ''}
                         </div>
                     </div>
                 </div>
             `}).join('');
         }
 
-        // 전체 스케줄 렌더링 함수 (2개의 스케줄 모두 포함)
+        // 전체 스케줄 렌더링 함수
         function renderSchedule() {
             const scheduleEl = document.getElementById('scheduleContent');
             
@@ -1110,20 +907,11 @@
             });
             
             members.forEach(member => {
-                // 첫 번째 스케줄 추가
-                if (member.day1 && member.startTime1 && member.endTime1) {
-                    scheduleByDay[member.day1].push({
+                if (member.day && member.startTime && member.endTime) {
+                    scheduleByDay[member.day].push({
                         name: member.name,
-                        startTime: member.startTime1,
-                        endTime: member.endTime1
-                    });
-                }
-                // 두 번째 스케줄 추가
-                if (member.day2 && member.startTime2 && member.endTime2) {
-                    scheduleByDay[member.day2].push({
-                        name: member.name,
-                        startTime: member.startTime2,
-                        endTime: member.endTime2
+                        startTime: member.startTime,
+                        endTime: member.endTime
                     });
                 }
             });
@@ -1200,14 +988,11 @@
         function addMember() {
             const name = document.getElementById('name').value.trim();
             const phone = document.getElementById('phone').value.trim();
-            const registerDate = document.getElementById('registerDate').value;
+            const joinDate = document.getElementById('joinDate').value;
             const fee = document.getElementById('fee').value;
-            const day1 = document.getElementById('day1').value;
-            const startTime1 = document.getElementById('startTime1').value;
-            const endTime1 = document.getElementById('endTime1').value;
-            const day2 = document.getElementById('day2').value;
-            const startTime2 = document.getElementById('startTime2').value;
-            const endTime2 = document.getElementById('endTime2').value;
+            const day = document.getElementById('dayOfWeek').value;
+            const startTime = document.getElementById('startTime').value;
+            const endTime = document.getElementById('endTime').value;
             const email = document.getElementById('email').value.trim();
             const address = document.getElementById('address').value.trim();
 
@@ -1216,35 +1001,22 @@
                 return;
             }
 
-            // 시간 입력 검증 및 충돌 검사
-            const schedules = [];
-            
-            if (day1 && startTime1 && endTime1) {
-                if (startTime1 >= endTime1) {
-                    showAlert('첫 번째 스케줄의 종료시간은 시작시간보다 커야 합니다!');
+            // 시간 입력 검증
+            if (day && (!startTime || !endTime)) {
+                showAlert('요일을 선택하셨다면 시작시간과 종료시간을 모두 입력해주세요!');
+                return;
+            }
+
+            if (startTime && endTime) {
+                if (startTime >= endTime) {
+                    showAlert('종료시간은 시작시간보다 커야 합니다!');
                     return;
                 }
-                schedules.push({ day: day1, startTime: startTime1, endTime: endTime1 });
-            }
-            
-            if (day2 && startTime2 && endTime2) {
-                if (startTime2 >= endTime2) {
-                    showAlert('두 번째 스케줄의 종료시간은 시작시간보다 커야 합니다!');
-                    return;
-                }
-                schedules.push({ day: day2, startTime: startTime2, endTime: endTime2 });
-            }
-            
-            // 시간 충돌 검사
-            for (const schedule of schedules) {
-                const conflict = checkTimeConflict(
-                    schedule.day, 
-                    schedule.startTime, 
-                    schedule.endTime,
-                    null, null, null
-                );
+                
+                // 시간 충돌 검사
+                const conflict = checkTimeConflict(day, startTime, endTime);
                 if (conflict.conflict) {
-                    showAlert(`시간 충돌! ${conflict.memberName} 회원이 이미 ${conflict.existingTime}에 등록되어 있습니다.`);
+                    showAlert(`시간 충돌! ${conflict.memberName} 회원이 이미 ${dayNames[day]} ${conflict.existingTime}에 등록되어 있습니다.`);
                     return;
                 }
             }
@@ -1252,14 +1024,11 @@
             const member = {
                 name,
                 phone,
-                registerDate: registerDate || new Date().toISOString().split('T')[0],
+                joinDate,
                 fee: fee ? parseInt(fee) : null,
-                day1: day1 || null,
-                startTime1: startTime1 || null,
-                endTime1: endTime1 || null,
-                day2: day2 || null,
-                startTime2: startTime2 || null,
-                endTime2: endTime2 || null,
+                day: day || null,
+                startTime: startTime || null,
+                endTime: endTime || null,
                 email,
                 address
             };
@@ -1281,14 +1050,11 @@
 
             const name = document.getElementById('name').value.trim();
             const phone = document.getElementById('phone').value.trim();
-            const registerDate = document.getElementById('registerDate').value;
+            const joinDate = document.getElementById('joinDate').value;
             const fee = document.getElementById('fee').value;
-            const day1 = document.getElementById('day1').value;
-            const startTime1 = document.getElementById('startTime1').value;
-            const endTime1 = document.getElementById('endTime1').value;
-            const day2 = document.getElementById('day2').value;
-            const startTime2 = document.getElementById('startTime2').value;
-            const endTime2 = document.getElementById('endTime2').value;
+            const day = document.getElementById('dayOfWeek').value;
+            const startTime = document.getElementById('startTime').value;
+            const endTime = document.getElementById('endTime').value;
             const email = document.getElementById('email').value.trim();
             const address = document.getElementById('address').value.trim();
 
@@ -1297,36 +1063,22 @@
                 return;
             }
 
-            // 시간 입력 검증 및 충돌 검사
-            const schedules = [];
-            
-            if (day1 && startTime1 && endTime1) {
-                if (startTime1 >= endTime1) {
-                    showAlert('첫 번째 스케줄의 종료시간은 시작시간보다 커야 합니다!');
+            // 시간 입력 검증
+            if (day && (!startTime || !endTime)) {
+                showAlert('요일을 선택하셨다면 시작시간과 종료시간을 모두 입력해주세요!');
+                return;
+            }
+
+            if (startTime && endTime) {
+                if (startTime >= endTime) {
+                    showAlert('종료시간은 시작시간보다 커야 합니다!');
                     return;
                 }
-                schedules.push({ day: day1, startTime: startTime1, endTime: endTime1 });
-            }
-            
-            if (day2 && startTime2 && endTime2) {
-                if (startTime2 >= endTime2) {
-                    showAlert('두 번째 스케줄의 종료시간은 시작시간보다 커야 합니다!');
-                    return;
-                }
-                schedules.push({ day: day2, startTime: startTime2, endTime: endTime2 });
-            }
-            
-            // 시간 충돌 검사 (현재 수정 중인 회원 제외)
-            for (const schedule of schedules) {
-                const conflict = checkTimeConflict(
-                    schedule.day, 
-                    schedule.startTime, 
-                    schedule.endTime,
-                    null, null, null,
-                    currentEditIndex
-                );
+                
+                // 시간 충돌 검사 (현재 수정 중인 회원 제외)
+                const conflict = checkTimeConflict(day, startTime, endTime, currentEditIndex);
                 if (conflict.conflict) {
-                    showAlert(`시간 충돌! ${conflict.memberName} 회원이 이미 ${conflict.existingTime}에 등록되어 있습니다.`);
+                    showAlert(`시간 충돌! ${conflict.memberName} 회원이 이미 ${dayNames[day]} ${conflict.existingTime}에 등록되어 있습니다.`);
                     return;
                 }
             }
@@ -1334,14 +1086,11 @@
             members[currentEditIndex] = {
                 name,
                 phone,
-                registerDate: registerDate || members[currentEditIndex].registerDate,
+                joinDate,
                 fee: fee ? parseInt(fee) : null,
-                day1: day1 || null,
-                startTime1: startTime1 || null,
-                endTime1: endTime1 || null,
-                day2: day2 || null,
-                startTime2: startTime2 || null,
-                endTime2: endTime2 || null,
+                day: day || null,
+                startTime: startTime || null,
+                endTime: endTime || null,
                 email,
                 address
             };
@@ -1358,14 +1107,11 @@
             const member = members[index];
             document.getElementById('name').value = member.name;
             document.getElementById('phone').value = member.phone || '';
-            document.getElementById('registerDate').value = member.registerDate || '';
+            document.getElementById('joinDate').value = member.joinDate || '';
             document.getElementById('fee').value = member.fee || '';
-            document.getElementById('day1').value = member.day1 || '';
-            document.getElementById('startTime1').value = member.startTime1 || '';
-            document.getElementById('endTime1').value = member.endTime1 || '';
-            document.getElementById('day2').value = member.day2 || '';
-            document.getElementById('startTime2').value = member.startTime2 || '';
-            document.getElementById('endTime2').value = member.endTime2 || '';
+            document.getElementById('dayOfWeek').value = member.day || '';
+            document.getElementById('startTime').value = member.startTime || '';
+            document.getElementById('endTime').value = member.endTime || '';
             document.getElementById('email').value = member.email || '';
             document.getElementById('address').value = member.address || '';
             currentEditIndex = index;
@@ -1406,14 +1152,11 @@
         function clearForm() {
             document.getElementById('name').value = '';
             document.getElementById('phone').value = '';
-            document.getElementById('registerDate').value = '';
+            document.getElementById('joinDate').value = '';
             document.getElementById('fee').value = '';
-            document.getElementById('day1').value = '';
-            document.getElementById('startTime1').value = '';
-            document.getElementById('endTime1').value = '';
-            document.getElementById('day2').value = '';
-            document.getElementById('startTime2').value = '';
-            document.getElementById('endTime2').value = '';
+            document.getElementById('dayOfWeek').value = '';
+            document.getElementById('startTime').value = '';
+            document.getElementById('endTime').value = '';
             document.getElementById('email').value = '';
             document.getElementById('address').value = '';
             currentEditIndex = null;
@@ -1441,34 +1184,8 @@
             }
         }
 
-        // 비밀번호 확인 후 설정 열기
         function openSettings() {
-            document.getElementById('passwordInput').value = '';
-            document.getElementById('passwordModal').classList.add('active');
-        }
-
-        function closePasswordModal() {
-            document.getElementById('passwordModal').classList.remove('active');
-        }
-
-        function checkPassword() {
-            const inputPassword = document.getElementById('passwordInput').value;
-            if (inputPassword === settings.adminPassword) {
-                closePasswordModal();
-                openSettingsDialog();
-            } else {
-                showAlert('비밀번호가 틀렸습니다!');
-            }
-        }
-
-        function openSettingsDialog() {
             document.getElementById('clubNameInput').value = settings.clubName || '';
-            document.getElementById('feePreset1').value = settings.feePresets[0] || '';
-            document.getElementById('feePreset2').value = settings.feePresets[1] || '';
-            document.getElementById('feePreset3').value = settings.feePresets[2] || '';
-            document.getElementById('feePreset4').value = settings.feePresets[3] || '';
-            document.getElementById('feePreset5').value = settings.feePresets[4] || '';
-            document.getElementById('adminPassword').value = '';
             document.getElementById('settingsModal').classList.add('active');
         }
 
@@ -1478,27 +1195,10 @@
 
         function saveSettings() {
             settings.clubName = document.getElementById('clubNameInput').value.trim();
-            
-            // 월회비 기본값 저장
-            settings.feePresets = [
-                parseInt(document.getElementById('feePreset1').value) || 0,
-                parseInt(document.getElementById('feePreset2').value) || 0,
-                parseInt(document.getElementById('feePreset3').value) || 0,
-                parseInt(document.getElementById('feePreset4').value) || 0,
-                parseInt(document.getElementById('feePreset5').value) || 0
-            ];
-            
-            // 비밀번호 변경
-            const newPassword = document.getElementById('adminPassword').value;
-            if (newPassword) {
-                settings.adminPassword = newPassword;
-            }
-            
             saveToFirebase();
             if (settings.clubName) {
                 document.getElementById('clubNameDisplay').textContent = settings.clubName;
             }
-            updateFeePresetButtons();
             closeSettings();
             showAlert('설정이 저장되었습니다!');
         }
@@ -1536,18 +1236,9 @@
                         saveToFirebase();
                     }
                     
-                    if (data.settings) {
-                        if (data.settings.clubName) {
-                            settings.clubName = data.settings.clubName;
-                            document.getElementById('clubNameDisplay').textContent = settings.clubName;
-                        }
-                        if (data.settings.feePresets) {
-                            settings.feePresets = data.settings.feePresets;
-                        }
-                        if (data.settings.adminPassword) {
-                            settings.adminPassword = data.settings.adminPassword;
-                        }
-                        updateFeePresetButtons();
+                    if (data.settings && data.settings.clubName) {
+                        settings.clubName = data.settings.clubName;
+                        document.getElementById('clubNameDisplay').textContent = settings.clubName;
                     }
                     
                     renderMembers();
@@ -1561,15 +1252,12 @@
             reader.readAsText(file);
         }
 
-        // 초기화
-        document.getElementById('registerDate').valueAsDate = new Date();
-        document.getElementById('startTime1').value = "19:00";
-        document.getElementById('endTime1').value = "21:00";
-        document.getElementById('startTime2').value = "19:00";
-        document.getElementById('endTime2').value = "21:00";
+        // 입장일 기본값을 오늘로 설정
+        document.getElementById('joinDate').valueAsDate = new Date();
         
-        // 회비 기본값 버튼 초기화
-        updateFeePresetButtons();
+        // 시작시간 기본값 설정
+        document.getElementById('startTime').value = "19:00";
+        document.getElementById('endTime').value = "21:00";
     </script>
 </body>
 </html>
