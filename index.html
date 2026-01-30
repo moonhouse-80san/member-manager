@@ -761,7 +761,7 @@
             </div>
             <p>설정을 열려면 비밀번호를 입력해주세요.</p>
             <div class="password-input">
-                <input type="password" id="passwordInput" placeholder="비밀번호 입력" onkeyup="if(event.key === 'Enter') checkPassword()">
+                <input type="password" id="passwordInput" placeholder="비밀번호 입력 (기본: 0000)" onkeyup="if(event.key === 'Enter') checkPassword()">
             </div>
             <div class="modal-buttons">
                 <button style="background: #2196F3;" onclick="checkPassword()">확인</button>
@@ -848,7 +848,7 @@
         let currentSort = 'name';
         let settings = { 
             clubName: '',
-            feePresets: [40000, 70000, 100000, 200000, 300000],
+            feePresets: [100000, 150000, 200000, 250000, 300000],
             adminPassword: '0000'
         };
         let firebaseDb = null;
